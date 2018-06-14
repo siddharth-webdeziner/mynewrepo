@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    h1.
+        User List
+    ul
+        each user, i in userlist
+            li(style="margin-top:15px;")
+                a(href="/details/#{user._id}")= user.username
+                <br>
+                img(src="uploads/#{user.userimg}" width="100px")
+                br
+                a(href="mailto:#{user.email}")= user.email
+                <br>
+                a(href="/delete/#{user._id}") Delete
+                &nbsp;&nbsp;&nbsp;
+                a(href="/updateuser/#{user._id}") Update

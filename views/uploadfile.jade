@@ -1,0 +1,6 @@
+extends layout
+
+block content
+	form#formAddUser(style="margin-top:10px;" method="post" enctype='multipart/form-data' action="/uploadjavatpoint" class="formContainers")
+		input(type="file" name="uploadFile")
+		button#btnSubmit(type="submit" class="btn btn-default") upload

@@ -1,0 +1,84 @@
+extends layout
+
+block content
+	form#formAddUser(name="adduser" method="post" class="formContainers")
+		h3= title
+		div(class="form-group")
+			label(for="userimg") Upload your Pic
+			br
+			button(type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal") Upload Pic
+			input#inputUserimg(type="hidden", placeholder="Phone no.", name="userimg" class="form-control" value="#{src}")
+		div(class="form-group")
+			label(for="username") User name
+			input#inputUserName(type="text", placeholder="username", name="username" class="form-control")
+		div(class="form-group")
+			label(for="useremail") User Email
+			input#inputUserEmail(type="text", placeholder="useremail", name="useremail" class="form-control")
+		div(class="form-group")
+			label(for="password") Password
+			input#inputUserPass(type="password", placeholder="Password", name="password" class="form-control")
+		div(class="form-group")
+			label(for="userconfirmpass") Confirm Password
+			input#inputUserConfirmPass(type="password", placeholder="Confirm Password", name="confirmPassword" class="form-control")
+		div(class="form-group")
+			label(for="userphone") Phone No.
+			input#inputUserPhone(type="number", placeholder="Phone no.", name="phone" class="form-control")
+		div(class="form-group")
+			label(for="useraddress") Address
+			textarea#address( placeholder="Enter Address..", name="address" class="form-control addressBox")
+			input#latitude(type="hidden" placeholder="Your latitude is.." name="lat")
+			input#longitude(type="hidden" placeholder="Your longitude is.." name="long")
+		button#btnSubmit(type="button" class="btn btn-default addNewUser") submit
+	#myModal.modal.fade(role='dialog' ng-app="app" ng-controller="Ctrl")
+		.modal-dialog
+			// Modal content
+			.modal-content
+				.modal-header
+					button.close(type='button', data-dismiss='modal') ×
+					h4.modal-title Modal Header
+				.modal-body
+					form#formAddUser(method="post" action="/uploadjavatpoint" enctype="multipart/form-data")
+						div
+							input#fileInput1(type="file", name="uploadFile")
+						button.btn.btn-default(type='submit') Submit
+	script.
+		function showResult(result) {
+			console.log(result.geometry.location.lat());
+			console.log(result.geometry.location.lng());
+		    document.getElementById('latitude').value = result.geometry.location.lat();
+		    document.getElementById('longitude').value = result.geometry.location.lng();
+		}
+
+		function getLatitudeLongitude(callback, address) {
+		    // If adress is not supplied, use default value 'Ferrol, Galicia, Spain'
+		    address = address || 'Ferrol, Galicia, Spain';
+		    // Initialize the Geocoder
+		    geocoder = new google.maps.Geocoder();
+		    if (geocoder) {
+		        geocoder.geocode({
+		            'address': address
+		        }, function (results, status) {
+		            if (status == google.maps.GeocoderStatus.OK) {
+		                callback(results[0]);
+		            }
+		        });
+		    }
+		}
+
+		var button = document.getElementById('address');
+
+		button.addEventListener("blur", function () {
+			console.log("yes!!");
+		    var address = document.getElementById('address').value;
+		    getLatitudeLongitude(showResult, address)
+		});
+
+		$(".addNewUser").click(function(){
+			console.log("adduser!!");
+			var usernode = { userimg: $("#inputUserimg").val(), username: $("#inputUserName").val(),useremail: $("#inputUserEmail").val(),password: $("#inputUserPass").val(),userphone: $("#inputUserPhone").val(),address: $("#address").val(),lat: $("#latitude").val(),long: $("#longitude").val()};
+			console.log(usernode)
+			$.post('/adduser',usernode, function(data) {
+				alert("done!!");
+				$("input, textarea").val("");
+			});
+		})

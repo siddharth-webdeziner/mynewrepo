@@ -1,0 +1,11 @@
+extends layout
+
+block content	
+	each user, i in usercomments
+		form#formAddUser(name="adduser",method="post",action="/commentsPage/#{user._id}" class="formContainers")
+			h1= title
+			div(class="form-group")
+				label(for="username")
+				input#inputUsername(type="hidden", name="username" class="form-control" value="#{user.username}")
+				textarea#inputUserName(type="text", placeholder="Enter comment", name="usercomments" class="form-control" style="resize:none; width:100%; height:150px;")
+			button#btnSubmit(type="submit" class="btn btn-default") Comments

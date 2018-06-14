@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	h2 #{title}
+	div#map
+	ul#totalLocations(style="display:none;")
+		each user, i in userlist
+			li(id="#{user._id}")
+				input#inputUserlat(type="hidden", placeholder="image source", name="userimg" value="#{user.userlat}")
+				<br>
+				input#inputUserlong(type="hidden", placeholder="image source", name="userimg" value="#{user.userlong}")
+				<br>
+				input#inputUseradd(type="hidden", placeholder="image source", name="userimg" value="#{user.useradd}")
