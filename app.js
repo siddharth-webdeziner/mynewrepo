@@ -17,7 +17,7 @@ var Nexmo = require('nexmo');
 // Database
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/videodatabase');
+var db = monk('mongodb://heroku_qcnqsbnf:jvksr9nbjldoa4ug5m6nkakn66@ds259250.mlab.com:59250/heroku_qcnqsbnf');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
