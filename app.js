@@ -17,7 +17,8 @@ var Nexmo = require('nexmo');
 // Database
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('mongodb://heroku_qcnqsbnf:jvksr9nbjldoa4ug5m6nkakn66@ds259250.mlab.com:59250/heroku_qcnqsbnf');
+const CONNECTION_URI = process.env.MONGODB_URI || 'localhost:27017/videodatabase';
+var db = monk(CONNECTION_URI);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -201,8 +202,9 @@ app.use(function(err, req, res, next) {
     });
 });
 
+const PORT = process.env.PORT || 5000;
 // Listen to port 5000
-app.listen(5000, function () {
-    console.log('Dev app listening on port 5000!');
+app.listen(PORT, function () {
+    console.log('Dev app listening on port ${PORT}');
 });
 // module.exports = app;
