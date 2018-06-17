@@ -1,0 +1,15 @@
+extends layout
+block content
+    form#formAddUser(name="addvideo" method="post" class="formContainers")
+        h3= title
+        div(class="form-group")
+            label(for="videocode") Video Code
+            input#inputVideoCode(type="text", placeholder="Video code", name="videocode" class="form-control")
+        div(class="form-group")
+            label(for="videotitle") Video Title
+            input#inputVideoTitle(type="text", placeholder="Video Title", name="videotitle" class="form-control")
+        div(class="form-group")
+            label(for="videocat") Video Category
+            input#inputVideoCat(type="text", placeholder="Video Category", name="videocat" class="form-control")
+        button#btnSubmit(type="submit" class="btn btn-default") Add Video
+        p= error
