@@ -2,7 +2,7 @@
   "name": "code",
   "version": "1.0.0",
   "description": "savingdata",
-  "main": "main.js",
+  "main": "app.js",
   "dependencies": {
     "body-parser": "^1.18.3",
     "client-sessions": "^0.8.0",
@@ -23,11 +23,15 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "keywords": [
     "nodejs"
   ],
+  "engines": {
+     "node": "8.9.4",
+     "npm": "5.7.1"
+  },
   "author": "siddharth",
   "license": "ISC"
 }
