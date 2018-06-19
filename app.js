@@ -89,8 +89,19 @@ app.use(expressSession({secret: 'max', saveUninitialized: false, resave: false})
 
 // Make our db accessible to our router
 app.use(function(req,res,next){
-    req.db = db;
-    next();
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
+    // intercept OPTIONS method
+    if ('OPTIONS' == req.method) {
+        res.send(200);
+    }
+    else {
+        //next();
+        req.db = db;
+        next();
+    }
 });
 
 
@@ -103,6 +114,8 @@ app.use('/newuser', newuser);
 app.use('/dashboard', dashboard);
 app.use('/addvideo', addvideo);
 app.use('/logout', logout);
+
+
 
 
 
