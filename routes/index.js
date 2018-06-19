@@ -21,15 +21,11 @@ router.get('/helloworld/:id', function(req, res) {
     //res.render('helloworld', { title: 'Hello, World!' });
     var db = req.db;
     var uid = req.params.id;
-    console.log("uid : "+uid)
     var collection = db.get('usercollection');
-    console.log(req.session.user);
     if(req.session.user == undefined){
         res.render('login', { title: 'Login page' });
     } else {
         collection.find({"_id":uid},{},function(e,docs){
-            console.log("docs");
-            console.log(docs);
             res.render('helloworld', { title : "Write your comments", "usercomments": docs });
         });
     }
@@ -48,13 +44,11 @@ router.get('/helloworld/:id', function(req, res) {
 
 /* GET User delete page. */
 router.get('/delete/:id', function(req, res) {
-    console.log("in delete user!!");
     var userDel = [];
     var db = req.db;
     var uid = req.params.id;
     var collection = db.get('usercollection');
     collection.remove({"_id":uid},{},function(e,docs){
-        console.log("docs", docs);
         userDel.push(docs)
         res.redirect("/userslist");
     });
@@ -68,7 +62,6 @@ router.post('/commentsPage/:id', function(req, res, next) {
     // Get our form values. These rely on the "name" attributes
     var userName = req.body.username;
     var userCommented = req.body.usercomments;
-    console.log(req.body);
 
     // Set our collection
     var collection = db.get('usercomments');
@@ -99,12 +92,10 @@ router.get('/updateuser/:id', function(req, res) {
     var db = req.db;
     var uid = req.params.id;
     var collection = db.get('usercollection');
-    console.log(">>>>>>>>", req.session.user);
     if(req.session.user == undefined){
         res.render('login', { title: 'Login page' });
     } else {
         collection.find({"_id":uid},{},function(e,docs){
-            console.log(docs);
             res.render('updateuser', { title : "Update profile", "userupdate": docs });
         });
     }
@@ -118,8 +109,6 @@ router.post('/updateprofile/:id', function(req, res) {
     var db = req.db;
 
     // Get our form values. These rely on the "name" attributes
-    console.log("req.body");
-    console.log(req.body);
     var userImg = req.body.userimg;
     var userName = req.body.username;
     var userEmail = req.body.useremail;
@@ -147,6 +136,40 @@ router.post('/updateprofile/:id', function(req, res) {
         }
     });
 });
+
+
+router.post('/addvideo', function(req, res) {
+    var db = req.db;
+    // Get our form values. These rely on the "name" attributes
+    var videoCode = req.body.videocode;
+    var videoTitle = (req.body.videotitle);
+    var videoCat = (req.body.videocat);
+    if(videoCode != "" && videoTitle != "" && videoCat != ""){
+        var collection = db.get('addedvideoscode');
+        req.session.success = true;
+        // Submit to the DB
+        collection.insert({
+            "videocode" : videoCode,
+            "videotitle" : videoTitle,
+            "videoCat" : videoCat
+        }, function (err, doc) {
+            if (err) {
+                // If it failed, return error
+                res.send("There was a problem adding the information to the database.");
+            }
+            else {
+                // And forward to success page
+                res.redirect("/addvideo");
+                //res.json({"video" : doc})
+                //res.render('userlist', {"userlist" : userDel});
+            }
+        });
+    }
+  });
+
+
+
+
 
 router.get('/uploadfile', function(req, res) {
     res.render('uploadfile', { title: 'Upload Image'});

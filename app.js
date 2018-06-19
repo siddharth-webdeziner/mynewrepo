@@ -22,8 +22,10 @@ var db = monk('localhost:27017/videodatabase');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var userslist = require('./routes/userslist');
+var videolist = require('./routes/videolist');
 var login = require('./routes/login');
 var newuser = require('./routes/newuser');
+var addvideo = require('./routes/addvideo');
 var dashboard = require('./routes/dashboard');
 var logout = require('./routes/logout');
 
@@ -62,6 +64,7 @@ app.post('/uploadjavatpoint',function(req,res){
         }  
         //res.redirect("/dashboard");
         //res.render('newuser', { title: 'dashboard', src: path });
+        console.log(path);
         res.render('newuser', { title: 'Add New User', src: path });
     });  
 });  
@@ -93,9 +96,11 @@ app.use(function(req,res,next){
 app.use('/', routes);
 app.use('/users', users);
 app.use('/userslist', userslist);
+app.use('/videolist', videolist);
 app.use('/login', login);
 app.use('/newuser', newuser);
 app.use('/dashboard', dashboard);
+app.use('/addvideo', addvideo);
 app.use('/logout', logout);
 
 
@@ -110,11 +115,15 @@ app.post('/adduser', function(req, res) {
     var userEmail = req.body.useremail;
     var userPassword = (req.body.password);
     var userPhone = req.body.userphone;
+    console.log(req.body);
+    console.log(userPassword);
     var userImage = req.body.userimg;
     var userAddress = req.body.address;
     var userLat = req.body.lat;
     var userLong = req.body.long;
+    console.log("userImage : "+userImage)
     if(userImage == 'undefined'){
+        console.log('innnnnnnnnn');
         userImage = 'dummy_media.png';
     }
     // Set our collection
@@ -143,11 +152,14 @@ app.post('/adduser', function(req, res) {
              text : "U have been successfully registered!!"
           }
   
+          console.log(mailOptions);
           // And forward to success page
           smtpTransport.sendMail(mailOptions, function(error, response){
             if(error){
+              console.log(error);
               res.end("error");
             }else{
+              console.log("Message sent: " + response.message);
               res.end("sent");
             }
           });
@@ -195,5 +207,6 @@ app.use(function(err, req, res, next) {
 
 // Listen to port 5000
 app.listen(5000, function () {
+    console.log('Dev app listening on port 5000!');
 });
 // module.exports = app;
