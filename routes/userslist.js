@@ -7,7 +7,6 @@ router.get('/', function(req, res) {
     var collection = db.get('usercollection');
     collection.find({},{},function(e,docs){
         docs = docs.reverse();
-        console.log("docs", docs);
         res.render('userlist', {"userlist" : docs});
         //res.json({"userlist" : docs})
     });
