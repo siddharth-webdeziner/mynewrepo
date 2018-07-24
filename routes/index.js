@@ -16,8 +16,8 @@ router.get('/', function(req, res, next) {
     });
 });
 
-/* GET Hello World page. */
-router.get('/helloworld/:id', function(req, res) {
+/* GET comments page. */
+router.get('/comments/:id', function(req, res) {
     //res.render('helloworld', { title: 'Hello, World!' });
     var db = req.db;
     var uid = req.params.id;
@@ -26,7 +26,7 @@ router.get('/helloworld/:id', function(req, res) {
         res.render('login', { title: 'Login page' });
     } else {
         collection.find({"_id":uid},{},function(e,docs){
-            res.render('helloworld', { title : "Write your comments", "usercomments": docs });
+            res.render('comments', { title : "Write your comments", "usercomments": docs });
         });
     }
 });
@@ -62,13 +62,14 @@ router.post('/commentsPage/:id', function(req, res, next) {
     // Get our form values. These rely on the "name" attributes
     var userName = req.body.username;
     var userCommented = req.body.usercomments;
-
+    var userId = req.params.id;
     // Set our collection
     var collection = db.get('usercomments');
 
     req.session.success = true;
     // Submit to the DB
     collection.insert({
+        "id": userId,
         "username" : userName,
         "comments" : userCommented
     }, function (err, doc) {
@@ -104,7 +105,6 @@ router.get('/updateuser/:id', function(req, res) {
 
 /* update user. */
 router.post('/updateprofile/:id', function(req, res) {
-    
     // Set our internal DB variable
     var db = req.db;
 
@@ -132,7 +132,7 @@ router.post('/updateprofile/:id', function(req, res) {
         }
         else {
             // And forward to success page
-            res.redirect("/userlist");
+            res.redirect("/userslist");
         }
     });
 });

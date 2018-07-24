@@ -9,7 +9,13 @@ router.get('/', function(req, res) {
     userObj.push(req.session.user)
     if(req.session.user != undefined){
         console.log("in");
-        res.render('dashboard', { title: 'Dashboard page', "userProfile": userObj  });
+        var db = req.db;
+        var collection = db.get('usercomments');
+        collection.find({},{},function(e,docs){
+            docs = docs.reverse();
+            console.log("docs>>>>>>>>>>>>>>>>>", docs);
+            res.render('dashboard', { title: 'Dashboard page', "userProfile": userObj, "comments": docs  });
+        });
     } else {
         console.log("out");
         res.render('login', { title: 'Login page' });
@@ -37,28 +43,23 @@ router.post('/', function(req, res) {
   // Get our form values. These rely on the "name" attributes
   var userName = req.body.username;
   var userPassword = (req.body.password);
-  console.log(userName + " : " + userPassword)
   var collection = db.get('usercollection');
   collection.findOne({ username: userName }, function(err, user) {
-    console.log(user);
     if (!user) {
-        console.log("in")
-        res.render('login', { title: 'Login page', error: 'Invalid email or password.' });
+        //res.render('login', { title: 'Login page', error: 'Invalid email or password.' });
+        res.json({"userlist" : "No such user!!"})
     } else {
-        console.log("in else!!")
       if (userPassword === user.password) {
-        console.log("in email");
         // sets a cookie with the user's info
-        console.log(user);
         var jsonObj = [];
         jsonObj.push(user);
         req.session.user = user;
-        console.log("user");
         //res.render('dashboard',{  title: 'Dashboard page' , "userProfile": jsonObj });
         return res.redirect("/dashboard");
+        //res.json({"userlist" : user})
       } else {
-        console.log("in else else");
-        res.render('login', { error: 'Invalid email or password.' });
+        //res.render('login', { error: 'Invalid email or password.' });
+        res.json({"userlist" : user})
       }
     }
   });

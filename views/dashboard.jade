@@ -5,19 +5,19 @@ block content
 		h3 #{user.username}'s Profile
 		form#formAddUser(style="margin-top:10px;" name="adduser" method="post" action="/logout" class="formContainers")
 			button#btnSubmit(type="submit" class="btn btn-default") Logout
-			&nbsp;&nbsp;&nbsp;
 			a(href="/updateuser/#{user._id}")
 				button#btnSubmit(type="button" class="btn btn-default") Update
-			&nbsp;&nbsp;&nbsp;
-			a(href="/helloworld/#{user._id}")
+			a(href="/comments/#{user._id}")
 				button#btnSubmit(type="button" class="btn btn-default") comments
-			&nbsp;&nbsp;&nbsp;
 			a(href="/uploadfile")
 				button#btnSubmit(type="button" class="btn btn-default") upload Image
 			p= error
 		div.col-md-8.col-sm-9.col-xs.12(style="margin: 30px auto 20px;float:none;")
 			.form-group.row
-				img(src="uploads/#{user.userimg}" width="250px" style="margin:0 auto 20px; display:block;")
+				if user.userimg == undefined
+					img(src="uploads/dummy_media.png" width="250px" style="margin:0 auto 20px; display:block;")
+				else
+					img(src="uploads/#{user.userimg}" width="250px" style="margin:0 auto 20px; display:block;")
 			.form-group.row
 				label.col-sm-4.col-form-label(for='example-text-input') User name
 				.col-sm-6
@@ -30,3 +30,6 @@ block content
 				label.col-sm-4.col-form-label(for='example-email-input') Phone
 				.col-sm-6
 					p #{user.phone}
+		each comment, i in comments
+			ul
+				li #{comment.comments}

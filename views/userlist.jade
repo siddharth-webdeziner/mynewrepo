@@ -8,7 +8,10 @@ block content
             li(style="margin-top:15px;")
                 a(href="/details/#{user._id}")= user.username
                 <br>
-                img(src="uploads/#{user.userimg}" width="100px")
+                if user.userimg == undefined
+                    img(src="uploads/dummy_media.png" width="110px")
+                else
+                    img(src="uploads/#{user.userimg}" width="120px")
                 br
                 a(href="mailto:#{user.email}")= user.email
                 <br>
