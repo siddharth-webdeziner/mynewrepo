@@ -129,13 +129,11 @@ app.post('/adduser', function(req, res) {
     var userEmail = req.body.useremail;
     var userPassword = (req.body.password);
     var userPhone = req.body.userphone;
-    console.log(req.body);
-    console.log(userPassword);
+    var userAboutme = req.body.aboutme;
     var userImage = req.body.userimg;
     var userAddress = req.body.address;
     var userLat = req.body.lat;
     var userLong = req.body.long;
-    console.log("userImage : "+userImage)
     if(userImage == 'undefined'){
         console.log('innnnnnnnnn');
         userImage = 'dummy_media.png';
@@ -149,6 +147,7 @@ app.post('/adduser', function(req, res) {
         "email" : userEmail,
         "password" : userPassword,
         "phone" : userPhone,
+        "aboutme": userAboutme,
         "userimg" : userImage,
         "useradd" : userAddress,
         "userlat" : userLat,
@@ -173,7 +172,6 @@ app.post('/adduser', function(req, res) {
               console.log(error);
               res.end("error");
             }else{
-              console.log("Message sent: " + response.message);
               res.end("sent");
             }
           });
