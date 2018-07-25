@@ -13,7 +13,7 @@ block content
 			input#inputUserName(type="text", placeholder="username", name="username" class="form-control")
 		div(class="form-group")
 			label(for="useremail") User Email
-			input#inputUserEmail(type="text", placeholder="useremail", name="useremail" class="form-control")
+			input#inputUserEmail(type="email", placeholder="useremail", name="useremail" class="form-control")
 		div(class="form-group")
 			label(for="password") Password
 			input#inputUserPass(type="password", placeholder="Password", name="password" class="form-control")
@@ -25,7 +25,10 @@ block content
 			input#inputUserPhone(type="number", placeholder="Phone no.", name="phone" class="form-control")
 		div(class="form-group")
 			label(for="useraddress") Address
-			textarea#address( placeholder="Enter Address..", name="address" class="form-control addressBox")
+			textarea#address( placeholder="Enter Address..", name="address" class="form-control textBox")
+		div(class="form-group")
+			label(for="aboutme") About me
+			textarea#inputUserAbout( placeholder="About me", name="aboutme" class="form-control textBox")
 			input#latitude(type="hidden" placeholder="Your latitude is.." name="lat")
 			input#longitude(type="hidden" placeholder="Your longitude is.." name="long")
 		button#btnSubmit(type="button" class="btn btn-default addNewUser") submit
@@ -37,7 +40,7 @@ block content
 					button.close(type='button', data-dismiss='modal') ×
 					h4.modal-title Modal Header
 				.modal-body
-					form#formAddUser(method="post" action="/uploadjavatpoint" enctype="multipart/form-data")
+					form#formAddUserImage(method="post" action="/uploadjavatpoint" enctype="multipart/form-data")
 						div
 							input#fileInput1(type="file", name="uploadFile")
 						button.btn.btn-default(type='submit') Submit
@@ -75,10 +78,10 @@ block content
 
 		$(".addNewUser").click(function(){
 			console.log("adduser!!");
-			var usernode = { userimg: $("#inputUserimg").val(), username: $("#inputUserName").val(),useremail: $("#inputUserEmail").val(),password: $("#inputUserPass").val(),userphone: $("#inputUserPhone").val(),address: $("#address").val(),lat: $("#latitude").val(),long: $("#longitude").val()};
-			console.log(usernode)
+			var usernode = { userimg: $("#inputUserimg").val(), username: $("#inputUserName").val(),useremail: $("#inputUserEmail").val(),password: $("#inputUserPass").val(),userphone: $("#inputUserPhone").val(),address: $("#address").val(),aboutme: $("#inputUserAbout").val(),lat: $("#latitude").val(),long: $("#longitude").val()};
+			console.log("usernodeusernodeusernodeusernodeusernode : ",usernode)
 			$.post('/adduser',usernode, function(data) {
-				alert("done!!");
+				alert("New User Created!!");
 				$("input, textarea").val("");
 			});
 		})

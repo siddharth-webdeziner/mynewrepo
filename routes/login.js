@@ -11,7 +11,7 @@ router.get('/', function(req, res) {
         console.log("in");
         var db = req.db;
         var collection = db.get('usercomments');
-        collection.find({},{},function(e,docs){
+        collection.find({id : req.session.user._id},{},function(e,docs){
             docs = docs.reverse();
             console.log("docs>>>>>>>>>>>>>>>>>", docs);
             res.render('dashboard', { title: 'Dashboard page', "userProfile": userObj, "comments": docs  });
