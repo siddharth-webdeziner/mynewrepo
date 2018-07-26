@@ -23,7 +23,7 @@ router.get('/comments/:id', function(req, res) {
     var uid = req.params.id;
     var collection = db.get('usercollection');
     if(req.session.user == undefined){
-        res.render('login', { title: 'Login page' });
+        res.redirect('/login');
     } else {
         collection.find({"_id":uid},{},function(e,docs){
             res.render('comments', { title : "Write your comments", "usercomments": docs });
@@ -48,10 +48,16 @@ router.get('/delete/:id', function(req, res) {
     var db = req.db;
     var uid = req.params.id;
     var collection = db.get('usercollection');
-    collection.remove({"_id":uid},{},function(e,docs){
-        userDel.push(docs)
+    if(req.session.user == undefined){
+        res.redirect('/login');
+    } else if(uid != req.session.user._id ) {
+        collection.remove({"_id":uid},{},function(e,docs){
+            userDel.push(docs)
+            res.redirect("/userslist");
+        });
+    } else {
         res.redirect("/userslist");
-    });
+    }
 });
 
 
@@ -94,7 +100,7 @@ router.get('/updateuser/:id', function(req, res) {
     var uid = req.params.id;
     var collection = db.get('usercollection');
     if(req.session.user == undefined){
-        res.render('login', { title: 'Login page' });
+        res.redirect('/login');
     } else {
         collection.find({"_id":uid},{},function(e,docs){
             res.render('updateuser', { title : "Update profile", "userupdate": docs });
