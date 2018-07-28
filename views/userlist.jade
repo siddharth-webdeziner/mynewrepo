@@ -15,6 +15,26 @@ block content
                 br
                 a(href="mailto:#{user.email}")= user.email
                 <br>
-                a(href="/delete/#{user._id}") Delete
+                button( data-toggle="modal" data-target="#myModal" onclick="deleteUser('#{user._id}','#{user.username}')") Delete
                 &nbsp;&nbsp;&nbsp;
                 a(href="/updateuser/#{user._id}") Update
+    #myModal.modal.fade(role='dialog')
+        .modal-dialog
+            // Modal content
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal') ×
+                    h4.modal-title Modal Header
+                .modal-body
+                    form#formAddUserImage()
+                        div(id="deleteMessage")
+                        <br />
+                        button.btn.btn-default(type='submit')
+                            a(id="delete_user" href="") Submit
+                        button.btn.btn-default(type='submit') Cancel
+    script.
+        function deleteUser(id,name){
+            $("#delete_user").prop("href","");
+            $("#delete_user").prop("href","delete/"+id);
+            $("#deleteMessage").text("Do you want to delete "+name)
+        }
