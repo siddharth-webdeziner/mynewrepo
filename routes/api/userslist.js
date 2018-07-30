@@ -3,6 +3,7 @@ var router = express.Router();
 
 /* GET Userlist page. */
 router.get('/', function(req, res) {
+    console.log("in userlist");
     var db = req.db;
     var collection = db.get('usercollection');
     collection.find({},{},function(e,docs){
@@ -11,5 +12,6 @@ router.get('/', function(req, res) {
         //res.json({"userlist" : docs})
     });
 });
+
 
 module.exports = router;
