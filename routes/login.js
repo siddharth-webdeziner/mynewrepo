@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var jwt = require('jsonwebtoken');
+var config = require('../config.js')
 
 /* login page. */
 router.get('/', function(req, res) {
@@ -44,18 +46,34 @@ router.post('/', function(req, res) {
   var userName = req.body.username;
   var userPassword = (req.body.password);
   var collection = db.get('usercollection');
+  console.log("username : ",userName +">>>> password"+userPassword);
   collection.findOne({ username: userName }, function(err, user) {
     if (!user) {
         //res.render('login', { title: 'Login page', error: 'Invalid email or password.' });
         res.json({"userlist" : "No such user!!"})
     } else {
       if (userPassword === user.password) {
+
+        var token = jwt.sign({
+          user: userName
+        },
+        config.secret, {
+          expiresIn: 24*60*60
+        })
+
         // sets a cookie with the user's info
         var jsonObj = [];
         jsonObj.push(user);
         req.session.user = user;
+        res.json(200, {
+          'responce':'success',
+          'token': token,
+          'userObj': jsonObj,
+        })
+
+
         //res.render('dashboard',{  title: 'Dashboard page' , "userProfile": jsonObj });
-        return res.redirect("/dashboard");
+        //return res.redirect("/dashboard");
         //res.json({"userlist" : user})
       } else {
         //res.render('login', { error: 'Invalid email or password.' });

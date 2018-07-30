@@ -19,16 +19,19 @@ var mongo = require('mongodb');
 var monk = require('monk');
 const CONNECTION_URI = process.env.MONGODB_URI || 'localhost:27017/videodatabase';
 var db = monk(CONNECTION_URI);
+var config = require('./config.js');
+
+
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
-var userslist = require('./routes/userslist');
-var videolist = require('./routes/videolist');
+var users = require('./routes/api/users');
+var userslist = require('./routes/api/userslist');
+var videolist = require('./routes/api/videolist');
 var login = require('./routes/login');
 var newuser = require('./routes/newuser');
-var addvideo = require('./routes/addvideo');
-var dashboard = require('./routes/dashboard');
-var logout = require('./routes/logout');
+var addvideo = require('./routes/api/addvideo');
+var dashboard = require('./routes/api/dashboard');
+var logout = require('./routes/api/logout');
 
 var app = express();
 
@@ -92,7 +95,6 @@ app.use(function(req,res,next){
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-
     // intercept OPTIONS method
     if ('OPTIONS' == req.method) {
         res.send(200);
@@ -104,16 +106,18 @@ app.use(function(req,res,next){
     }
 });
 
+//app.use('/routes/api', require('./auth.js'));
+
 
 app.use('/', routes);
-app.use('/users', users);
-app.use('/userslist', userslist);
-app.use('/videolist', videolist);
+app.use('/users', require('./auth.js'), users);
+app.use('/userslist',  require('./auth.js'), userslist);
+app.use('/videolist', require('./auth.js'), videolist);
 app.use('/login', login);
 app.use('/newuser', newuser);
-app.use('/dashboard', dashboard);
-app.use('/addvideo', addvideo);
-app.use('/logout', logout);
+app.use('/dashboard', require('./auth.js'), dashboard);
+app.use('/addvideo', require('./auth.js'), addvideo);
+app.use('/logout', require('./auth.js'), logout);
 
 
 
