@@ -157,7 +157,7 @@ router.post('/addvideo', function(req, res) {
         collection.insert({
             "videocode" : videoCode,
             "videotitle" : videoTitle,
-            "videoCat" : videoCat
+            "videocat" : videoCat
         }, function (err, doc) {
             if (err) {
                 // If it failed, return error
@@ -165,7 +165,14 @@ router.post('/addvideo', function(req, res) {
             }
             else {
                 // And forward to success page
-                res.redirect("/addvideo");
+                //res.redirect("/addvideo");
+                var jsonObj = [];
+                jsonObj.push(doc);
+                console.log(jsonObj);
+                res.json(200, {
+                    'responce':'success',
+                    'userObj': jsonObj,
+                  })
                 //res.json({"video" : doc})
                 //res.render('userlist', {"userlist" : userDel});
             }

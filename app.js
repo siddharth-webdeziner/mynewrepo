@@ -112,7 +112,7 @@ app.use(function(req,res,next){
 app.use('/', routes);
 app.use('/users', require('./auth.js'), users);
 app.use('/userslist',  require('./auth.js'), userslist);
-app.use('/videolist', require('./auth.js'), videolist);
+app.use('/videolist', videolist);
 app.use('/login', login);
 app.use('/newuser', newuser);
 app.use('/dashboard', require('./auth.js'), dashboard);
@@ -184,7 +184,14 @@ app.post('/adduser', function(req, res) {
           var text = 'Hi '+userName+' u have successfully registered. Keep posting!!';
   
           nexmo.message.sendSms(from, to, text);
-          res.send("userlist");
+          //res.send("userlist");
+          var jsonObj = [];
+          jsonObj.push(doc);
+          console.log(jsonObj);
+          res.json(200, {
+            'responce':'success',
+            'userObj': jsonObj,
+          })
         }
     });
 });
