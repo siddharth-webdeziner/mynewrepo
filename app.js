@@ -45,7 +45,7 @@ var smtpTransport = nodemailer.createTransport({
     host: "smtp.gmail.com",
     auth: {
         user: "siddharth.shahi971@gmail.com",
-        pass: "siddharth@12!"
+        pass: "Siddharth11sept"
     }
 });
 
@@ -130,9 +130,9 @@ app.post('/adduser', function(req, res) {
     var userImage = 'dummy_media.png';
     // Get our form values. These rely on the "name" attributes
     var userName = req.body.username;
-    var userEmail = req.body.useremail;
+    var userEmail = req.body.email;
     var userPassword = (req.body.password);
-    var userPhone = req.body.userphone;
+    var userPhone = req.body.phone;
     var userAboutme = req.body.aboutme;
     var userImage = req.body.userimg;
     var userAddress = req.body.address;
@@ -144,56 +144,63 @@ app.post('/adduser', function(req, res) {
     }
     // Set our collection
     var collection = db.get('usercollection');
-  
-    // Submit to the DB
-    collection.insert({
-        "username" : userName,
-        "email" : userEmail,
-        "password" : userPassword,
-        "phone" : userPhone,
-        "aboutme": userAboutme,
-        "userimg" : userImage,
-        "useradd" : userAddress,
-        "userlat" : userLat,
-        "userlong" : userLong,
-    }, function (err, doc) {
-        if (err) {
-            // If it failed, return error
-            res.send("There was a problem adding the information to the database.");
+    collection.findOne({ email: userEmail }, function(err, user) {
+        if (!user) {
+            //res.render('login', { title: 'Login page', error: 'Invalid email or password.' });
+            // Submit to the DB
+            collection.insert({
+                "username" : userName,
+                "email" : userEmail,
+                "password" : userPassword,
+                "phone" : userPhone,
+                "aboutme": userAboutme,
+                "userimg" : userImage,
+                "useradd" : userAddress,
+                "userlat" : userLat,
+                "userlong" : userLong,
+            }, function (err, doc) {
+                if (err) {
+                    // If it failed, return error
+                    res.send("There was a problem adding the information to the database.");
+                }
+                else {
+                var mailOptions={
+                    to : userEmail,
+                    subject : "Greeting from VDO lounge",
+                    text : "Hello, "+userName+", you have been successfully registered!!"
+                }
+        
+                console.log(mailOptions);
+                // And forward to success page
+                smtpTransport.sendMail(mailOptions, function(error, response){
+                    if(error){
+                    console.log(error);
+                    res.end("error");
+                    }else{
+                    res.end("sent");
+                    }
+                });
+                var from = '918077022653';
+                var to = '918077022653';
+                var text = 'Hi '+userName+', you have successfully registered. Keep posting!!';
+        
+                nexmo.message.sendSms(from, to, text);
+                //res.send("userlist");
+                var jsonObj = [];
+                jsonObj.push(doc);
+                console.log(jsonObj);
+                res.json(200, {
+                    'response':'success',
+                    'userObj': jsonObj,
+                })
+                }
+            });
+        } else{
+            res.json(200,{
+                'response':'error'
+            })
         }
-        else {
-  
-          var mailOptions={
-             to : userEmail,
-             subject : "Greeting from XYZ",
-             text : "U have been successfully registered!!"
-          }
-  
-          console.log(mailOptions);
-          // And forward to success page
-          smtpTransport.sendMail(mailOptions, function(error, response){
-            if(error){
-              console.log(error);
-              res.end("error");
-            }else{
-              res.end("sent");
-            }
-          });
-          var from = '918077022653';
-          var to = '918077022653';
-          var text = 'Hi '+userName+' u have successfully registered. Keep posting!!';
-  
-          nexmo.message.sendSms(from, to, text);
-          //res.send("userlist");
-          var jsonObj = [];
-          jsonObj.push(doc);
-          console.log(jsonObj);
-          res.json(200, {
-            'responce':'success',
-            'userObj': jsonObj,
-          })
-        }
-    });
+      });
 });
 
 

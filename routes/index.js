@@ -60,7 +60,6 @@ router.get('/delete/:id', function(req, res) {
     }
 });
 
-
 /* POST to Add a comment */
 router.post('/commentsPage/:id', function(req, res, next) {
     //check validation
@@ -109,7 +108,7 @@ router.get('/updateuser/:id', function(req, res) {
 });
 
 
-/* update user. */
+/*----------- update user------------ */
 router.post('/updateprofile/:id', function(req, res) {
     // Set our internal DB variable
     var db = req.db;
@@ -143,7 +142,7 @@ router.post('/updateprofile/:id', function(req, res) {
     });
 });
 
-
+/*----------------adding video ----------------*/
 router.post('/addvideo', function(req, res) {
     var db = req.db;
     // Get our form values. These rely on the "name" attributes
@@ -164,8 +163,6 @@ router.post('/addvideo', function(req, res) {
                 res.send("There was a problem adding the information to the database.");
             }
             else {
-                // And forward to success page
-                //res.redirect("/addvideo");
                 var jsonObj = [];
                 jsonObj.push(doc);
                 console.log(jsonObj);
@@ -173,16 +170,23 @@ router.post('/addvideo', function(req, res) {
                     'responce':'success',
                     'userObj': jsonObj,
                   })
-                //res.json({"video" : doc})
-                //res.render('userlist', {"userlist" : userDel});
             }
         });
     }
   });
 
-
-
-
+  /*----------------delete video ----------------*/
+  router.post('/deletevideo/:id', function(req, res) {
+    var db = req.db;
+    var uid = req.params.id;
+    console.log("uiduiduid : ", uid);
+    var collection = db.get('addedvideoscode');
+    collection.remove({"_id":uid},{},function(e,docs){
+        res.json(200, {
+            'responce':'success'
+        })
+    });
+  });
 
 router.get('/uploadfile', function(req, res) {
     res.render('uploadfile', { title: 'Upload Image'});
