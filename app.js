@@ -30,6 +30,7 @@ var videolist = require('./routes/api/videolist');
 var login = require('./routes/login');
 var newuser = require('./routes/newuser');
 var addvideo = require('./routes/api/addvideo');
+var savedvideolist = require('./routes/api/savedvideolist');
 var dashboard = require('./routes/api/dashboard');
 var logout = require('./routes/api/logout');
 
@@ -117,10 +118,8 @@ app.use('/login', login);
 app.use('/newuser', newuser);
 app.use('/dashboard', require('./auth.js'), dashboard);
 app.use('/addvideo', require('./auth.js'), addvideo);
+app.use('/savedvideolist', savedvideolist);
 app.use('/logout', require('./auth.js'), logout);
-
-
-
 
 
 /* POST to Add User Service */

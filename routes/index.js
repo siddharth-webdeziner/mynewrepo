@@ -93,6 +93,49 @@ router.post('/commentsPage/:id', function(req, res, next) {
 
 });
 
+/*-------------------save video-----------*/
+/* POST to Add a comment */
+router.post('/savevideo', function(req, res, next) {
+    //check validation
+    var db = req.db;
+    // Get our form values. These rely on the "name" attributes
+    var videoCode = req.body.videocode;
+    var videoTitle = req.body.videotitle;
+    var videoCat = req.body.videocat;
+    var emailId = req.body.emailId;
+    // Set our collection
+    var collection = db.get('savedVideos');
+
+    req.session.success = true;
+    // Submit to the DB
+    collection.insert({
+        "videocode" : videoCode,
+        "videotitle" : videoTitle,
+        "videocat" : videoCat,
+        "email": emailId
+    }, function (err, doc) {
+        if (err) {
+            // If it failed, return error
+            res.send("There was a problem adding the information to the database.");
+        }
+        else {
+            // And forward to success page
+            //res.redirect("/dashboard");
+            //res.render('userlist', {"userlist" : userDel});
+            var jsonObj = [];
+            jsonObj.push(doc);
+            console.log(jsonObj);
+            res.json(200, {
+                'responce':'success',
+                'userObj': jsonObj,
+            })
+        }
+    });
+    //
+
+
+});
+
 /* GET User update page. */
 router.get('/updateuser/:id', function(req, res) {
     var db = req.db;
