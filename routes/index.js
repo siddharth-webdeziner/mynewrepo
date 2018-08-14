@@ -231,8 +231,26 @@ router.post('/addvideo', function(req, res) {
     });
   });
 
+
+/* POST to saved videos */
+router.post('/savedvideoslist', function(req, res, next) {
+    //check validation
+    var db = req.db;
+    // Get our form values. These rely on the "name" attributes
+    var email = req.body.emailId;
+    // Set our collection
+    var collection = db.get('savedVideos');
+    // Submit to the DB
+    collection.find({email: email},{},function(e,docs){
+        res.json({"videolist" : docs})
+    });
+
+
+});
+
 router.get('/uploadfile', function(req, res) {
     res.render('uploadfile', { title: 'Upload Image'});
 });
+
 
 module.exports = router;
