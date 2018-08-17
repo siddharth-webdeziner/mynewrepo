@@ -12,6 +12,7 @@ var fileUpload = require('express-fileupload');
 var md5 = require('md5');
 var nodemailer = require("nodemailer");
 var Nexmo = require('nexmo');
+var jwt = require('jsonwebtoken');
 
 
 // Database
@@ -195,8 +196,22 @@ app.post('/adduser', function(req, res) {
                 }
             });
         } else{
-            res.json(200,{
-                'response':'error'
+
+            var token = jwt.sign({
+                user: userName
+            },
+            config.secret, {
+                expiresIn: 24*60*60
+            })
+    
+            // sets a cookie with the user's info
+            var jsonObj = [];
+            jsonObj.push(user);
+            req.session.user = user;
+            res.json(200, {
+                'responce':'success',
+                'token': token,
+                'userObj': jsonObj,
             })
         }
       });
