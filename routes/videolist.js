@@ -13,4 +13,16 @@ router.get('/', function(req, res) {
     });
 });
 
+/* GET Userlist page. */
+router.post('/', function(req, res) {
+    var db = req.db;
+    var catId = req.params.id;
+    var collection = db.get('addedvideoscode');
+    collection.find({"_id":uid},{},function(e,docs){
+        console.log("docs", docs);
+        //res.render('userlist', {"userlist" : docs});
+        res.json({"videolist" : docs})
+    });
+});
+
 module.exports = router;
